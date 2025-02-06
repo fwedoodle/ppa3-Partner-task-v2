@@ -24,6 +24,7 @@ public class Hyena extends Predator
     // number of steps a fox can go before it has to eat again.
     private static final int FOOD_VALUE = 9;
     
+    
     // Individual characteristics (instance fields).
 
     // The fox's food level, which is increased by eating rabbits.

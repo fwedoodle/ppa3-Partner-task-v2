@@ -99,6 +99,11 @@ public abstract class Animal
         }
     }
     
+    protected Boolean isMale()
+    {
+         return male;   
+    }
+    
     /**
      *  Returns the MAX_AGE value from the spcific animal 
      *  @return The MAX_AGE value from the speicfic animal

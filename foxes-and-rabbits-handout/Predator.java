@@ -54,12 +54,14 @@ public abstract class Predator extends Animal
         if(births > 0) {
             for (int b = 0; b < births && ! freeLocations.isEmpty(); b++) {
                 Location loc = freeLocations.remove(0);
-                Lion young = new Lion(false, loc, environment);
+                Predator young = createNewChild();
                 nextFieldState.placeAnimal(young, loc);
             }
         }
     }
         
+    abstract Predator createNewChild();
+    
     /**
      * Generate a number representing the number of births,
      * if it can breed.
