@@ -3,13 +3,13 @@ import java.util.Iterator;
 import java.util.Random;
 
 /**
- * A simple model of a Hyena.
+ * A simple model of a fox.
  * Foxes age, move, eat rabbits, and die.
  * 
  * @author David J. Barnes and Michael Kölling
  * @version 7.1
  */
-public class Hyena extends Predator
+public class Hyena extends Prey
 {
     // Characteristics shared by all foxes (class variables).
     // The age at which a fox can start to breed.
@@ -22,11 +22,14 @@ public class Hyena extends Predator
     private static final int MAX_LITTER_SIZE = 2;
     // The food value of a single rabbit. In effect, this is the
     // number of steps a fox can go before it has to eat again.
-    private static final int FOOD_VALUE = 9;
-    
+    private static final int ELEPHANT_FOOD_VALUE = 9;
+    // A shared random number generator to control breeding.
+    private static final Random rand = Randomizer.getRandom();
     
     // Individual characteristics (instance fields).
 
+    // The fox's age.
+    private int age;
     // The fox's food level, which is increased by eating rabbits.
     private int foodLevel;
 
@@ -37,16 +40,16 @@ public class Hyena extends Predator
      * @param randomAge If true, the fox will have random age and hunger level.
      * @param location The location within the field.
      */
-    public Hyena(boolean randomAge, Location location, Environment env)
+    public Hyena(boolean randomAge, Location location)
     {
-        super(location, env);
+        super(location);
         if(randomAge) {
             age = rand.nextInt(MAX_AGE);
         }
         else {
             age = 0;
         }
-        foodLevel = rand.nextInt(FOOD_VALUE);
+        foodLevel = rand.nextInt(ELEPHANT_FOOD_VALUE);   // update required to include all available prey species
     }
     
     /**
@@ -84,56 +87,8 @@ public class Hyena extends Predator
         }
     }
 
-    
-    /**
-     * Look for rabbits adjacent to the current location.
-     * Only the first live rabbit is eaten.
-     * @param field The field currently occupied.
-     * @return Where food was found, or null if it wasn't.
-     */
-    protected Location findFood(Field field)
-    {
-        List<Location> adjacent = field.getAdjacentLocations(getLocation());
-        Iterator<Location> it = adjacent.iterator();
-        Location foodLocation = null;
-        while(foodLocation == null && it.hasNext()) {
-            Location loc = it.next();
-            Animal animal = field.getAnimalAt(loc);
-            if(animal instanceof Animal rabbit) {
-                if(rabbit.isAlive()) {
-                    rabbit.setDead();
-                    foodLevel = FOOD_VALUE;
-                    foodLocation = loc;
-                }
-            }
-        }
-        return foodLocation;
-    }
-    
-    /**
-     *  Returns the MAX_AGE value
-     *  @return the MAX_AGE value
-     */
-    public int getMaxAge()
-    {
-        return MAX_AGE;
-    }
-    
-    protected int getMaxLitterSize()
-    {
-        return MAX_LITTER_SIZE;
-    }
-    
-    protected int getBreedingAge()
-    {
-        return BREEDING_AGE;
-    }
-    
-    protected double getBreedingProbability()
-    {
-        return BREEDING_PROBABILITY;
-    }
-    
+
+
     @Override
     public String toString() {
         return "Hyena{" +
@@ -142,5 +97,96 @@ public class Hyena extends Predator
                 ", location=" + getLocation() +
                 ", foodLevel=" + foodLevel +
                 '}';
+    }
+
+    /**
+     * Increase the age. This could result in the fox's death.
+     */
+    private void incrementAge()
+    {
+        age++;
+        if(age > MAX_AGE) {
+            setDead();
+        }
+    }
+    
+    /**
+     * Make this fox more hungry. This could result in the fox's death.
+     */
+    private void incrementHunger()
+    {
+        foodLevel--;
+        if(foodLevel <= 0) {
+            setDead();
+        }
+    }
+    
+    /**
+     * Look for rabbits adjacent to the current location.
+     * Only the first live rabbit is eaten.
+     * @param field The field currently occupied.
+     * @return Where food was found, or null if it wasn't.
+     */
+    private Location findFood(Field field)
+    {
+        List<Location> adjacent = field.getAdjacentLocations(getLocation());
+        Iterator<Location> it = adjacent.iterator();
+        Location foodLocation = null;
+        while(foodLocation == null && it.hasNext()) {
+            Location loc = it.next();
+            Animal animal = field.getAnimalAt(loc);
+            if(animal instanceof Elephant elephant) {
+                if(elephant.isAlive()) {
+                    elephant.setDead();
+                    foodLevel = ELEPHANT_FOOD_VALUE;
+                    foodLocation = loc;
+                }
+            }
+        }
+        return foodLocation;
+    }
+    
+    /**
+     * Check whether this fox is to give birth at this step.
+     * New births will be made into free adjacent locations.
+     * @param freeLocations The locations that are free in the current field.
+     */
+    private void giveBirth(Field nextFieldState, List<Location> freeLocations)
+    {
+        // New foxes are born into adjacent locations.
+        // Get a list of adjacent free locations.
+        int births = breed();
+        if(births > 0) {
+            for (int b = 0; b < births && ! freeLocations.isEmpty(); b++) {
+                Location loc = freeLocations.remove(0);
+                Hyena young = new Hyena(false, loc);
+                nextFieldState.placeAnimal(young, loc);
+            }
+        }
+    }
+        
+    /**
+     * Generate a number representing the number of births,
+     * if it can breed.
+     * @return The number of births (may be zero).
+     */
+    private int breed()
+    {
+        int births;
+        if(canBreed() && rand.nextDouble() <= BREEDING_PROBABILITY) {
+            births = rand.nextInt(MAX_LITTER_SIZE) + 1;
+        }
+        else {
+            births = 0;
+        }
+        return births;
+    }
+
+    /**
+     * A fox can breed if it has reached the breeding age.
+     */
+    private boolean canBreed()
+    {
+        return age >= BREEDING_AGE;
     }
 }

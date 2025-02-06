@@ -9,7 +9,7 @@ import java.util.Random;
  * @author David J. Barnes and Michael Kölling
  * @version 7.1
  */
-public class Lion extends Predator
+public class Lion extends Prey
 {
     // Characteristics shared by all foxes (class variables).
     // The age at which a fox can start to breed.
@@ -22,10 +22,14 @@ public class Lion extends Predator
     private static final int MAX_LITTER_SIZE = 2;
     // The food value of a single rabbit. In effect, this is the
     // number of steps a fox can go before it has to eat again.
-    private static final int FOOD_VALUE = 9;
+    private static final int RABBIT_FOOD_VALUE = 9;
+    // A shared random number generator to control breeding.
+    private static final Random rand = Randomizer.getRandom();
     
     // Individual characteristics (instance fields).
 
+    // The fox's age.
+    private int age;
     // The fox's food level, which is increased by eating rabbits.
     private int foodLevel;
 
@@ -36,16 +40,16 @@ public class Lion extends Predator
      * @param randomAge If true, the fox will have random age and hunger level.
      * @param location The location within the field.
      */
-    public Lion(boolean randomAge, Location location, Environment env)
+    public Lion(boolean randomAge, Location location)
     {
-        super(location, env);
+        super(location);
         if(randomAge) {
             age = rand.nextInt(MAX_AGE);
         }
         else {
             age = 0;
         }
-        foodLevel = rand.nextInt(FOOD_VALUE);
+        foodLevel = rand.nextInt(RABBIT_FOOD_VALUE);
     }
     
     /**
@@ -82,6 +86,40 @@ public class Lion extends Predator
             }
         }
     }
+
+
+
+    @Override
+    public String toString() {
+        return "Lion{" +
+                "age=" + age +
+                ", alive=" + isAlive() +
+                ", location=" + getLocation() +
+                ", foodLevel=" + foodLevel +
+                '}';
+    }
+
+    /**
+     * Increase the age. This could result in the fox's death.
+     */
+    private void incrementAge()
+    {
+        age++;
+        if(age > MAX_AGE) {
+            setDead();
+        }
+    }
+    
+    /**
+     * Make this fox more hungry. This could result in the fox's death.
+     */
+    private void incrementHunger()
+    {
+        foodLevel--;
+        if(foodLevel <= 0) {
+            setDead();
+        }
+    }
     
     /**
      * Look for rabbits adjacent to the current location.
@@ -89,7 +127,7 @@ public class Lion extends Predator
      * @param field The field currently occupied.
      * @return Where food was found, or null if it wasn't.
      */
-    protected Location findFood(Field field)
+    private Location findFood(Field field)
     {
         List<Location> adjacent = field.getAdjacentLocations(getLocation());
         Iterator<Location> it = adjacent.iterator();
@@ -97,10 +135,10 @@ public class Lion extends Predator
         while(foodLocation == null && it.hasNext()) {
             Location loc = it.next();
             Animal animal = field.getAnimalAt(loc);
-            if(animal instanceof Animal rabbit) {
-                if(rabbit.isAlive()) {
-                    rabbit.setDead();
-                    foodLevel = FOOD_VALUE;
+            if(animal instanceof Gazelle gazelle) {
+                if(gazelle.isAlive()) {
+                    gazelle.setDead();
+                    foodLevel = RABBIT_FOOD_VALUE;
                     foodLocation = loc;
                 }
             }
@@ -109,37 +147,46 @@ public class Lion extends Predator
     }
     
     /**
-     *  Returns the MAX_AGE value
-     *  @return the MAX_AGE value
+     * Check whether this fox is to give birth at this step.
+     * New births will be made into free adjacent locations.
+     * @param freeLocations The locations that are free in the current field.
      */
-    public int getMaxAge()
+    private void giveBirth(Field nextFieldState, List<Location> freeLocations)
     {
-        return MAX_AGE;
+        // New foxes are born into adjacent locations.
+        // Get a list of adjacent free locations.
+        int births = breed();
+        if(births > 0) {
+            for (int b = 0; b < births && ! freeLocations.isEmpty(); b++) {
+                Location loc = freeLocations.remove(0);
+                Lion young = new Lion(false, loc);
+                nextFieldState.placeAnimal(young, loc);
+            }
+        }
     }
-    
-    protected int getMaxLitterSize()
+        
+    /**
+     * Generate a number representing the number of births,
+     * if it can breed.
+     * @return The number of births (may be zero).
+     */
+    private int breed()
     {
-        return MAX_LITTER_SIZE;
-    }
-    
-    protected int getBreedingAge()
-    {
-        return BREEDING_AGE;
-    }
-    
-    protected double getBreedingProbability()
-    {
-        return BREEDING_PROBABILITY;
+        int births;
+        if(canBreed() && rand.nextDouble() <= BREEDING_PROBABILITY) {
+            births = rand.nextInt(MAX_LITTER_SIZE) + 1;
+        }
+        else {
+            births = 0;
+        }
+        return births;
     }
 
-    @Override
-    public String toString() {
-        return "Lion{" +
-                "age=" + getAge() +
-                ", alive=" + isAlive() +
-                ", location=" + getLocation() +
-                ", foodLevel=" + foodLevel +
-                '}';
+    /**
+     * A fox can breed if it has reached the breeding age.
+     */
+    private boolean canBreed()
+    {
+        return age >= BREEDING_AGE;
     }
-
 }

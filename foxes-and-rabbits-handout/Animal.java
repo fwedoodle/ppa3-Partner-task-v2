@@ -5,7 +5,7 @@
  * @author David J. Barnes and Michael Kölling
  * @version 7.0
  */
-public abstract class Animal
+public abstract class Animal implements EntityInterface
 {
     // Whether the animal is alive or not.
     private boolean alive;
@@ -96,11 +96,6 @@ public abstract class Animal
         if(age > getMaxAge()) {
             setDead();
         }
-    }
-    
-    protected Boolean isMale()
-    {
-         return male;   
     }
     
     /**

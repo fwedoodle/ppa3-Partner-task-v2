@@ -12,13 +12,13 @@ public class Gazelle extends Prey
 {
     // Characteristics shared by all gazelles (class variables).
     // The age at which a gazelle can start to breed.
-    private static final int BREEDING_AGE = 5;
+    private static final int BREEDING_AGE = 2;
     // The age to which a gazelle can live.
-    private static final int MAX_AGE = 40;
+    private static final int MAX_AGE = 15;
     // The likelihood of a gazelle breeding.
     private static final double BREEDING_PROBABILITY = 0.12;
     // The maximum number of births.
-    private static final int MAX_LITTER_SIZE = 4;
+    private static final int MAX_LITTER_SIZE = 1;
     // A shared random number generator to control breeding.
     private static final Random rand = Randomizer.getRandom();
     
@@ -84,7 +84,7 @@ public class Gazelle extends Prey
      * Increase the age.
      * This could result in the gazelle's death.
      */
-    private void incrementAge()
+    protected void incrementAge()
     {
         age++;
         if(age > MAX_AGE) {
@@ -97,7 +97,7 @@ public class Gazelle extends Prey
      * New births will be made into free adjacent locations.
      * @param freeLocations The locations that are free in the current field.
      */
-    private void giveBirth(Field nextFieldState, List<Location> freeLocations)
+    protected void giveBirth(Field nextFieldState, List<Location> freeLocations)
     {
         // New rabbits are born into adjacent locations.
         // Get a list of adjacent free locations.
@@ -135,5 +135,24 @@ public class Gazelle extends Prey
     private boolean canBreed()
     {
         return age >= BREEDING_AGE;
+    }
+    
+    protected int getMaxLitterSize()
+    {
+        return MAX_LITTER_SIZE;
+    }
+
+    protected int getBreedingAge()
+    {
+        return BREEDING_AGE;
+    }
+    
+    protected double getBreedingProbability()
+    {
+        return BREEDING_PROBABILITY;
+    }
+    
+    protected Prey createNewChild(Location loc) {
+        return new Gazelle(false, loc);
     }
 }

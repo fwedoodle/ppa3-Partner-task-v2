@@ -84,49 +84,14 @@ public class Elephant extends Prey
      * Increase the age.
      * This could result in the gazelle's death.
      */
-    private void incrementAge()
+    protected void incrementAge()
     {
         age++;
         if(age > MAX_AGE) {
             setDead();
         }
     }
-    
-    /**
-     * Check whether or not this gazelle is to give birth at this step.
-     * New births will be made into free adjacent locations.
-     * @param freeLocations The locations that are free in the current field.
-     */
-    private void giveBirth(Field nextFieldState, List<Location> freeLocations)
-    {
-        // New rabbits are born into adjacent locations.
-        // Get a list of adjacent free locations.
-        int births = breed();
-        if(births > 0) {
-            for (int b = 0; b < births && !freeLocations.isEmpty(); b++) {
-                Location loc = freeLocations.remove(0);
-                Elephant young = new Elephant(false, loc);
-                nextFieldState.placeAnimal(young, loc);
-            }
-        }
-    }
-        
-    /**
-     * Generate a number representing the number of births,
-     * if it can breed.
-     * @return The number of births (may be zero).
-     */
-    private int breed()
-    {
-        int births;
-        if(canBreed() && rand.nextDouble() <= BREEDING_PROBABILITY) {
-            births = rand.nextInt(MAX_LITTER_SIZE) + 1;
-        }
-        else {
-            births = 0;
-        }
-        return births;
-    }
+
 
     /**
      * A gazelle can breed if it has reached the breeding age.
@@ -136,4 +101,24 @@ public class Elephant extends Prey
     {
         return age >= BREEDING_AGE;
     }
+    
+    protected int getMaxLitterSize()
+    {
+        return MAX_LITTER_SIZE;
+    }
+
+    protected int getBreedingAge()
+    {
+        return BREEDING_AGE;
+    }
+    
+    protected double getBreedingProbability()
+    {
+        return BREEDING_PROBABILITY;
+    }
+    
+    protected Prey createNewChild(Location loc) {
+        return new Elephant(false, loc);
+    }
+    
 }

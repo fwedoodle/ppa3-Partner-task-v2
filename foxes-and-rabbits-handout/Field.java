@@ -114,17 +114,27 @@ public class Field
     }
 
     /**
-     * Print out the number of foxes and rabbits in the field.
+     * Print out the number of predators and prey in the field.
      */
     public void fieldStats()
     {
-        int numElephants = 0, numGazelles = 0,  numGiraffes = 0;
+        int numHyenas = 0, numLions = 0, numElephants = 0, numGazelles = 0,  numGiraffes = 0;
         for(Animal anAnimal : field.values()) 
-            if(anAnimal instanceof Elephant elephant) {
+            if(anAnimal instanceof Hyena hyena) {
+                if(hyena.isAlive()) {
+                    numHyenas++;
+                }
+            }            
+            else if(anAnimal instanceof Lion lion) {
+                if(lion.isAlive()) {
+                    numLions++;
+                }
+            }
+            else if(anAnimal instanceof Elephant elephant) {
                 if(elephant.isAlive()) {
                     numElephants++;
                 }
-            }            
+            }
             else if(anAnimal instanceof Gazelle gazelle) {
                 if(gazelle.isAlive()) {
                     numGazelles++;
@@ -136,8 +146,11 @@ public class Field
                 }
             }
 
-        System.out.println("Rabbits: " + numElepahnts +
-                           " Foxes: " + numFoxes);
+        System.out.println("Hyenas: " + numHyenas +
+                           " Lions: " + numLions +
+                           " Elephants: " + numElephants +
+                           " Gazelles: " + numGazelles +
+                           " Giraffes: " + numGiraffes);
     }
 
     /**

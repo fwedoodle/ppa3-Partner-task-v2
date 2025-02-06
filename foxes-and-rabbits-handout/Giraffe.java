@@ -84,7 +84,7 @@ public class Giraffe extends Prey
      * Increase the age.
      * This could result in the gazelle's death.
      */
-    private void incrementAge()
+    protected void incrementAge()
     {
         age++;
         if(age > MAX_AGE) {
@@ -105,7 +105,7 @@ public class Giraffe extends Prey
         if(births > 0) {
             for (int b = 0; b < births && !freeLocations.isEmpty(); b++) {
                 Location loc = freeLocations.remove(0);
-                Giraffe young = new Giraffe(false);
+                Giraffe young = new Giraffe(false, loc);
                 nextFieldState.placeAnimal(young, loc);
             }
         }
@@ -135,5 +135,24 @@ public class Giraffe extends Prey
     private boolean canBreed()
     {
         return age >= BREEDING_AGE;
+    }
+    
+    protected int getMaxLitterSize()
+    {
+        return MAX_LITTER_SIZE;
+    }
+
+    protected int getBreedingAge()
+    {
+        return BREEDING_AGE;
+    }
+    
+    protected double getBreedingProbability()
+    {
+        return BREEDING_PROBABILITY;
+    }
+    
+    protected Prey createNewChild(Location loc) {
+        return new Giraffe(false, loc);
     }
 }

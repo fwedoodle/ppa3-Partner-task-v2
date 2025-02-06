@@ -1,5 +1,6 @@
 import java.util.Random;
 import java.util.List;
+import java.util.Iterator;
 
 /**
  * Write a description of class Prey here.
@@ -35,7 +36,25 @@ public abstract class Prey extends Animal
      * @param field The field currently occupied.
      * @return Where food was found, or null if it wasn't.
      */
-    abstract protected Location findFood(Field field);
+    protected Location findFood(Field field)
+    {
+        List<Location> adjacent = field.getAdjacentLocations(getLocation());
+        Iterator<Location> it = adjacent.iterator();
+        Location foodLocation = null;
+        while(foodLocation == null && it.hasNext()) {
+            Location loc = it.next();
+            Animal animal = field.getAnimalAt(loc);
+            if(animal instanceof Gazelle gazelle) {
+                if(gazelle.isAlive()) {
+                    gazelle.setDead();
+                    foodLevel = RABBIT_FOOD_VALUE;
+                    foodLocation = loc;
+                }
+            }
+        }
+        return foodLocation;
+        
+    }
     
     /**
      * Check whether this fox is to give birth at this step.
@@ -50,13 +69,13 @@ public abstract class Prey extends Animal
         if(births > 0) {
             for (int b = 0; b < births && ! freeLocations.isEmpty(); b++) {
                 Location loc = freeLocations.remove(0);
-                Prey young = createNewChild();
+                Prey young = createNewChild(loc);
                 nextFieldState.placeAnimal(young, loc);
             }
         }
     }
     
-    abstract Prey createNewChild();
+    abstract Prey createNewChild(Location loc);
         
     /**
      * Generate a number representing the number of births,
@@ -84,6 +103,8 @@ public abstract class Prey extends Animal
     }
     
     abstract protected double getBreedingProbability();
+    
     abstract protected int getBreedingAge();
+    
     abstract protected int getMaxLitterSize();
 }

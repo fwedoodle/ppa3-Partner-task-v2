@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 import java.util.Random;
 
-/** 
+/**
  * Tthe Environment class is responsible for the progression of time and change in weather in the simulation.
  * ///
  * @author Matthew Kelsey
@@ -110,3 +110,4 @@ public class Environment
         System.out.println("Time of Day: " + timeOfDay + ", Weather: " + weather);
     }
 }
+
