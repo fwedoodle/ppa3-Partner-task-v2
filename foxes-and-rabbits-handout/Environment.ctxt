@@ -1,6 +1,6 @@
 #BlueJ class context
 comment0.target=Environment
-comment0.text=\n\ Tthe\ Environment\ class\ is\ responsible\ for\ the\ progression\ of\ time\ and\ change\ in\ weather\ in\ the\ simulation.\n\ ///\n\ @author\ Matthew\ Kelsey\n\ @version\ 1.0\n
+comment0.text=\ \n\ Tthe\ Environment\ class\ is\ responsible\ for\ the\ progression\ of\ time\ and\ change\ in\ weather\ in\ the\ simulation.\n\ ///\n\ @author\ Matthew\ Kelsey\n\ @version\ 1.0\n
 comment1.params=
 comment1.target=Environment()
 comment1.text=\n\ Constructor\ for\ Environment\ class.\n\ Initalizes\ time\ step\ (0)\ and\ sets\ a\ default\ weather\ and\ time\ state\ (Sunny,\ Dawn).\n

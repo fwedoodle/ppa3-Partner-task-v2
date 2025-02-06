@@ -2,7 +2,7 @@ import java.util.*;
 
 /**
  * A simple predator-prey simulator, based on a rectangular field containing 
- * rabbits and foxes.
+ * hyenas, lions, elephants, gazelles, and giraffes.
  * 
  * @author David J. Barnes and Michael Kölling
  * @version 7.1
@@ -14,14 +14,20 @@ public class Simulator
     private static final int DEFAULT_WIDTH = 120;
     // The default depth of the grid.
     private static final int DEFAULT_DEPTH = 80;
-    // The probability that a fox will be created in any given grid position.
-    private static final double FOX_CREATION_PROBABILITY = 0.02;
-    // The probability that a rabbit will be created in any given position.
-    private static final double RABBIT_CREATION_PROBABILITY = 0.08;    
-
+    // The probability that a hyena will be created in any given grid position.
+    private static final double HYENA_CREATION_PROBABILITY = 0.04;
+    // The probability that a lion will be created in any given position.
+    private static final double LION_CREATION_PROBABILITY = 0.01;    
+    // The probability that a elephant will be created in any given grid position.
+    private static final double ELEPHANT_CREATION_PROBABILITY = 0.02;
+    // The probability that a gazelle will be created in any given position.
+    private static final double GAZELLE_CREATION_PROBABILITY = 0.08;    
+    // The probability that a giraffe will be created in any given position.
+    private static final double GIRAFFE_CREATION_PROBABILITY = 0.04;   
+    
     // The current state of the field.
     private Field field;
-    // The current environment state of the simulation (time and weather)
+    // The current state of the environment.
     private Environment environment;
     // The current step of the simulation.
     private int step;
@@ -51,7 +57,7 @@ public class Simulator
         }
         
         field = new Field(depth, width);
-        environment = new Environemnt();
+        environment = new Environment();
         view = new SimulatorView(depth, width);
 
         reset();
@@ -63,7 +69,7 @@ public class Simulator
      */
     public void runLongSimulation()
     {
-        simulate(700);
+        simulate(4000);
     }
     
     /**
@@ -90,6 +96,8 @@ public class Simulator
         // Use a separate Field to store the starting state of
         // the next step.
         Field nextFieldState = new Field(field.getDepth(), field.getWidth());
+        
+        environment.simulateOneStep();
 
         List<Animal> animals = field.getAnimals();
         for (Animal anAnimal : animals) {
@@ -122,15 +130,30 @@ public class Simulator
         field.clear();
         for(int row = 0; row < field.getDepth(); row++) {
             for(int col = 0; col < field.getWidth(); col++) {
-                if(rand.nextDouble() <= FOX_CREATION_PROBABILITY) {
+                if(rand.nextDouble() <= HYENA_CREATION_PROBABILITY) {
                     Location location = new Location(row, col);
-                    Fox fox = new Fox(true, location);
-                    field.placeAnimal(fox, location);
+                    Hyena hyena = new Hyena(true, location);
+                    field.placeAnimal(hyena, location);
                 }
-                else if(rand.nextDouble() <= RABBIT_CREATION_PROBABILITY) {
+                else if(rand.nextDouble() <= LION_CREATION_PROBABILITY) {
                     Location location = new Location(row, col);
-                    Rabbit rabbit = new Rabbit(true, location);
-                    field.placeAnimal(rabbit, location);
+                    Lion lion = new Lion(true, location);
+                    field.placeAnimal(lion, location);
+                }
+                else if(rand.nextDouble() <= ELEPHANT_CREATION_PROBABILITY) {
+                    Location location = new Location(row, col);
+                    Elephant elephant = new Elephant(true, location);
+                    field.placeAnimal(elephant, location);
+                }
+                else if(rand.nextDouble() <= GAZELLE_CREATION_PROBABILITY) {
+                    Location location = new Location(row, col);
+                    Gazelle gazelle = new Gazelle(true, location);
+                    field.placeAnimal(gazelle, location);
+                }
+                else if(rand.nextDouble() <= GIRAFFE_CREATION_PROBABILITY) {
+                    Location location = new Location(row, col);
+                    Giraffe giraffe = new Giraffe(true, location);
+                    field.placeAnimal(giraffe, location);
                 }
                 // else leave the location empty.
             }
@@ -144,6 +167,7 @@ public class Simulator
     {
         //System.out.print("Step: " + step + " ");
         field.fieldStats();
+        environment.getStatus();
     }
     
     /**
