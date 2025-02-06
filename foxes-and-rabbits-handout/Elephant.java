@@ -34,9 +34,9 @@ public class Elephant extends Prey
      * @param randomAge If true, the rabbit will have a random age.
      * @param location The location within the field.
      */
-    public Elephant(boolean randomAge, Location location, Environment env)
+    public Elephant(boolean randomAge, Location location)
     {
-        super(location, env);
+        super(location);
         age = 0;
         if(randomAge) {
             age = rand.nextInt(MAX_AGE);
@@ -105,7 +105,7 @@ public class Elephant extends Prey
         if(births > 0) {
             for (int b = 0; b < births && !freeLocations.isEmpty(); b++) {
                 Location loc = freeLocations.remove(0);
-                Elephant young = new Elephant(false, loc, environment);
+                Elephant young = new Elephant(false, loc);
                 nextFieldState.placeAnimal(young, loc);
             }
         }

@@ -17,7 +17,7 @@ public abstract class Predator extends Animal
     /**
      * Constructor for objects of class Predator
      */
-    public Predator(Location location, Environment env)
+    public Predator(Location location)
     {
         super(location, env);
     }

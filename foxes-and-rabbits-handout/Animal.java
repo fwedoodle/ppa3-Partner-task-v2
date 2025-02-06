@@ -24,11 +24,10 @@ public abstract class Animal
      * Constructor for objects of class Animal.
      * @param location The animal's location.
      */
-    public Animal(Location location, Environment env)
+    public Animal(Location location)
     {
         this.alive = true;
         this.location = location;
-        this.environment = env;
     }
     
     /**

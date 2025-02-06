@@ -13,9 +13,9 @@ public abstract class Prey extends Animal
     protected static final Random rand = Randomizer.getRandom();
     private int foodLevel;
     
-    public Prey(Location loc, Environment env)
+    public Prey(Location loc)
     {
-        super(loc, env);
+        super(loc);
     }
     
     /**
