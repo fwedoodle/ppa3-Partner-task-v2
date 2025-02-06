@@ -7,20 +7,20 @@
  */
 public class Plant
 {
+
     // Location of the plant
     private Location location;
     // Current growth level of the plant
     private int growthLevel;
     // The max growth level the plant can grow to
-    private int maxGrowthLevel;
+    private static final int maxGrowthLevel = 5;
 
     /**
      * Constructor for objects of class Plant
      */
-    public Plant(Location loc, int maxGrowth)
+    public Plant(Location loc)
     {
         location = loc;
-        maxGrowthLevel = maxGrowth;
         growthLevel = 0;
     }
     
