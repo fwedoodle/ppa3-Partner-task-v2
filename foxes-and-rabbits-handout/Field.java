@@ -60,7 +60,7 @@ public class Field
      * @param location Where in the field.
      * @return The animal at the given location, or null if there is none.
      */
-    public FieldEntity getAnimalAt(Location location)
+    public FieldEntity getEntityAt(Location location)
     {
         return field.get(location);
     }

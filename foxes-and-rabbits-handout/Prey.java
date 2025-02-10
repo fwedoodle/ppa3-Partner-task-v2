@@ -31,8 +31,8 @@ public abstract class Prey extends Animal
     }
     
     /**
-     * Look for rabbits adjacent to the current location.
-     * Only the first live rabbit is eaten.
+     * Look for Plants adjacent to the current location.
+     * Only the first Plant that has a current growth value is eaten from.
      * @param field The field currently occupied.
      * @return Where food was found, or null if it wasn't.
      */
@@ -43,11 +43,11 @@ public abstract class Prey extends Animal
         Location foodLocation = null;
         while(foodLocation == null && it.hasNext()) {
             Location loc = it.next();
-            Animal animal = field.getAnimalAt(loc);
-            if(animal instanceof Gazelle gazelle) {
-                if(gazelle.isAlive()) {
-                    gazelle.setDead();
-                    foodLevel = RABBIT_FOOD_VALUE;
+            FieldEntity entity = field.getEntityAt(loc);
+            if(entity instanceof Plant plant) {
+                int foodVal = plant.eaten();
+                if(foodVal > 0) {
+                    foodLevel += foodVal;
                     foodLocation = loc;
                 }
             }
