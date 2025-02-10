@@ -117,6 +117,11 @@ public class Elephant extends Prey
         return BREEDING_PROBABILITY;
     }
     
+    protected int getMaxAge()
+    {
+        return MAX_AGE;
+    }
+    
     protected Prey createNewChild(Location loc) {
         return new Elephant(false, loc);
     }

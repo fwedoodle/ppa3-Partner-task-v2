@@ -19,7 +19,7 @@ public abstract class Predator extends Animal
      */
     public Predator(Location location)
     {
-        super(location, env);
+        super(location);
     }
     
     /**
@@ -54,7 +54,7 @@ public abstract class Predator extends Animal
         if(births > 0) {
             for (int b = 0; b < births && ! freeLocations.isEmpty(); b++) {
                 Location loc = freeLocations.remove(0);
-                Lion young = new Lion(false, loc, environment);
+                Lion young = new Lion(false, loc);
                 nextFieldState.placeAnimal(young, loc);
             }
         }

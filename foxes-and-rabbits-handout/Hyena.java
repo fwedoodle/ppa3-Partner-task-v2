@@ -102,7 +102,7 @@ public class Hyena extends Prey
     /**
      * Increase the age. This could result in the fox's death.
      */
-    private void incrementAge()
+    protected void incrementAge()
     {
         age++;
         if(age > MAX_AGE) {
@@ -113,7 +113,7 @@ public class Hyena extends Prey
     /**
      * Make this fox more hungry. This could result in the fox's death.
      */
-    private void incrementHunger()
+    protected void incrementHunger()
     {
         foodLevel--;
         if(foodLevel <= 0) {
@@ -127,7 +127,7 @@ public class Hyena extends Prey
      * @param field The field currently occupied.
      * @return Where food was found, or null if it wasn't.
      */
-    private Location findFood(Field field)
+    protected Location findFood(Field field)
     {
         List<Location> adjacent = field.getAdjacentLocations(getLocation());
         Iterator<Location> it = adjacent.iterator();
@@ -151,7 +151,7 @@ public class Hyena extends Prey
      * New births will be made into free adjacent locations.
      * @param freeLocations The locations that are free in the current field.
      */
-    private void giveBirth(Field nextFieldState, List<Location> freeLocations)
+    protected void giveBirth(Field nextFieldState, List<Location> freeLocations)
     {
         // New foxes are born into adjacent locations.
         // Get a list of adjacent free locations.
@@ -188,5 +188,10 @@ public class Hyena extends Prey
     private boolean canBreed()
     {
         return age >= BREEDING_AGE;
+    }
+    
+    protected int getMaxLitterSize()
+    {
+        return MAX_LITTER_SIZE;
     }
 }

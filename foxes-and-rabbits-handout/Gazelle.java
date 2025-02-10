@@ -152,6 +152,11 @@ public class Gazelle extends Prey
         return BREEDING_PROBABILITY;
     }
     
+    protected int getMaxAge()
+    {
+        return MAX_AGE;
+    }
+    
     protected Prey createNewChild(Location loc) {
         return new Gazelle(false, loc);
     }

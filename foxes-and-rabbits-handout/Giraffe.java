@@ -152,6 +152,11 @@ public class Giraffe extends Prey
         return BREEDING_PROBABILITY;
     }
     
+    protected int getMaxAge()
+    {
+        return MAX_AGE;
+    }
+    
     protected Prey createNewChild(Location loc) {
         return new Giraffe(false, loc);
     }
