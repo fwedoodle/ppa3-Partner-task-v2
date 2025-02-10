@@ -16,8 +16,12 @@ public class Field
     private final int depth, width;
     // Animals mapped by location.
     private final Map<Location, Animal> field = new HashMap<>();
+    // Plants mapped by location.
+    private final Map<Location, Plant> plantField = new HashMap<>();
     // The animals.
     private final List<Animal> animals = new ArrayList<>();
+    // The plants
+    private final List<Plant> plants = new ArrayList<>();
 
     /**
      * Represent a field of the given dimensions.
@@ -47,6 +51,11 @@ public class Field
         field.put(location, anAnimal);
         animals.add(anAnimal);
     }
+
+    public void placePlants()
+    {
+    }
+    
     
     /**
      * Return the animal at the given location, if any.

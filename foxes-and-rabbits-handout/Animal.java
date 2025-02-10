@@ -5,7 +5,7 @@
  * @author David J. Barnes and Michael Kölling
  * @version 7.0
  */
-public abstract class Animal implements EntityInterface
+public abstract class Animal
 {
     // Whether the animal is alive or not.
     private boolean alive;
