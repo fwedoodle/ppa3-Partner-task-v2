@@ -15,9 +15,7 @@ public class Field
     // The dimensions of the field.
     private final int depth, width;
     // Animals mapped by location.
-    private final Map<Location, Animal> field = new HashMap<>();
-    // Plants mapped by location.
-    private final Map<Location, Plant> plantField = new HashMap<>();
+    private final Map<Location, FieldEntity> field = new HashMap<>();
     // The animals.
     private final List<Animal> animals = new ArrayList<>();
     // The plants
@@ -38,7 +36,7 @@ public class Field
      * Place an animal at the given location.
      * If there is already an animal at the location it will
      * be lost.
-     * @param anAnimal The animal to be placed.
+     * @param anEntity The animal to be placed.
      * @param location Where to place the animal.
      */
     public void placeAnimal(Animal anAnimal, Location location)
@@ -62,7 +60,7 @@ public class Field
      * @param location Where in the field.
      * @return The animal at the given location, or null if there is none.
      */
-    public Animal getAnimalAt(Location location)
+    public FieldEntity getAnimalAt(Location location)
     {
         return field.get(location);
     }
@@ -77,11 +75,11 @@ public class Field
         List<Location> free = new LinkedList<>();
         List<Location> adjacent = getAdjacentLocations(location);
         for(Location next : adjacent) {
-            Animal anAnimal = field.get(next);
-            if(anAnimal == null) {
+            FieldEntity anEntity = field.get(next);
+            if(anEntity == null) {
                 free.add(next);
             }
-            else if(!anAnimal.isAlive()) {
+            else if(!anEntity.isAlive()) {
                 free.add(next);
             }
         }
@@ -128,28 +126,28 @@ public class Field
     public void fieldStats()
     {
         int numHyenas = 0, numLions = 0, numElephants = 0, numGazelles = 0,  numGiraffes = 0;
-        for(Animal anAnimal : field.values()) 
-            if(anAnimal instanceof Hyena hyena) {
+        for(FieldEntity anEntity : field.values()) 
+            if(anEntity instanceof Hyena hyena) {
                 if(hyena.isAlive()) {
                     numHyenas++;
                 }
             }            
-            else if(anAnimal instanceof Lion lion) {
+            else if(anEntity instanceof Lion lion) {
                 if(lion.isAlive()) {
                     numLions++;
                 }
             }
-            else if(anAnimal instanceof Elephant elephant) {
+            else if(anEntity instanceof Elephant elephant) {
                 if(elephant.isAlive()) {
                     numElephants++;
                 }
             }
-            else if(anAnimal instanceof Gazelle gazelle) {
+            else if(anEntity instanceof Gazelle gazelle) {
                 if(gazelle.isAlive()) {
                     numGazelles++;
                 }
             }
-            else if(anAnimal instanceof Giraffe giraffe) {
+            else if(anEntity instanceof Giraffe giraffe) {
                 if(giraffe.isAlive()) {
                     numGiraffes++;
                 }
@@ -181,18 +179,18 @@ public class Field
         boolean giraffeFound = false;
         Iterator<Animal> it = animals.iterator();
         while(it.hasNext() && ! (elephantFound && gazelleFound && giraffeFound)) {
-            Animal anAnimal = it.next();
-            if(anAnimal instanceof Elephant elephant) {
+            Animal anEntity = it.next();
+            if(anEntity instanceof Elephant elephant) {
                 if(elephant.isAlive()) {
                     elephantFound = true;
                 }
             }
-            else if(anAnimal instanceof Gazelle gazelle) {
+            else if(anEntity instanceof Gazelle gazelle) {
                 if(gazelle.isAlive()) {
                     gazelleFound = true;
                 }
             }
-            else if(anAnimal instanceof Giraffe giraffe) {
+            else if(anEntity instanceof Giraffe giraffe) {
                 if(giraffe.isAlive()) {
                     giraffeFound = true;
                 }

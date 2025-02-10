@@ -55,4 +55,9 @@ public class Plant
             currGrowth++;   
         } 
     }
+    
+    public boolean isAlive()
+    {
+        return true;
+    }
 }
