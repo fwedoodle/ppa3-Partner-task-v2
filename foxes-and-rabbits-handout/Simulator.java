@@ -122,7 +122,7 @@ public class Simulator
     }
     
     /**
-     * Randomly populate the field with foxes and rabbits.
+     * Randomly populate the field with all types of animals and plants
      */
     private void populate()
     {
