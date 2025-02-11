@@ -75,7 +75,7 @@ public abstract class Prey extends Animal
         }
     }
     
-    abstract Prey createNewChild(Location loc);
+    abstract protected Prey createNewChild(Location loc);
         
     /**
      * Generate a number representing the number of births,

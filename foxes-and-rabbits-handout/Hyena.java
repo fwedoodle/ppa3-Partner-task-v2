@@ -9,7 +9,7 @@ import java.util.Random;
  * @author David J. Barnes and Michael Kölling
  * @version 7.1
  */
-public class Hyena extends Prey
+public class Hyena extends Predator
 {
     // Characteristics shared by all foxes (class variables).
     // The age at which a fox can start to breed.
@@ -134,8 +134,8 @@ public class Hyena extends Prey
         Location foodLocation = null;
         while(foodLocation == null && it.hasNext()) {
             Location loc = it.next();
-            Animal animal = field.getAnimalAt(loc);
-            if(animal instanceof Elephant elephant) {
+            FieldEntity entity = field.getEntityAt(loc);
+            if(entity instanceof Elephant elephant) {
                 if(elephant.isAlive()) {
                     elephant.setDead();
                     foodLevel = ELEPHANT_FOOD_VALUE;
@@ -145,53 +145,29 @@ public class Hyena extends Prey
         }
         return foodLocation;
     }
-    
-    /**
-     * Check whether this fox is to give birth at this step.
-     * New births will be made into free adjacent locations.
-     * @param freeLocations The locations that are free in the current field.
-     */
-    protected void giveBirth(Field nextFieldState, List<Location> freeLocations)
-    {
-        // New foxes are born into adjacent locations.
-        // Get a list of adjacent free locations.
-        int births = breed();
-        if(births > 0) {
-            for (int b = 0; b < births && ! freeLocations.isEmpty(); b++) {
-                Location loc = freeLocations.remove(0);
-                Hyena young = new Hyena(false, loc);
-                nextFieldState.placeAnimal(young, loc);
-            }
-        }
-    }
         
-    /**
-     * Generate a number representing the number of births,
-     * if it can breed.
-     * @return The number of births (may be zero).
-     */
-    private int breed()
+    protected Predator createNewChild(Location loc)
     {
-        int births;
-        if(canBreed() && rand.nextDouble() <= BREEDING_PROBABILITY) {
-            births = rand.nextInt(MAX_LITTER_SIZE) + 1;
-        }
-        else {
-            births = 0;
-        }
-        return births;
-    }
-
-    /**
-     * A fox can breed if it has reached the breeding age.
-     */
-    private boolean canBreed()
-    {
-        return age >= BREEDING_AGE;
+        return new Hyena(false, loc);
     }
     
     protected int getMaxLitterSize()
     {
         return MAX_LITTER_SIZE;
+    }
+    
+    protected int getBreedingAge()
+    {
+        return BREEDING_AGE;
+    }
+    
+    protected double getBreedingProbability()
+    {
+        return BREEDING_PROBABILITY;
+    }
+    
+    protected int getMaxAge()
+    {
+        return MAX_AGE;
     }
 }
